@@ -1,6 +1,7 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from datetime import date
+import statistics
 
 def main():
     input_folder = "input_files"
@@ -67,6 +68,7 @@ def parse_in(input_path):
         i += 1
 
     books_with_count = count_borrows(books)
+    books_with_idle_time = calculate_idle_time(books)
 
     return books_with_count
 
@@ -82,6 +84,18 @@ def count_borrows(books):
 
 def calculate_idle_time(books):
     for book in books.keys():
+        idle_times = []
+        for i, checkin in enumerate(books[book]["check_ins"]):
+            if i+1 < len(books[book]["check_outs"]):
+                idle_times.append((books[book]["check_outs"][i+1])-checkin)
+
+        books[book]["idle_time"] = sum(idle_times, timedelta(0)) / len(idle_times)
+    return books
+
+
+
+
+
 
 
 
