@@ -23,8 +23,6 @@ def main():
         sorted_list = sort_books(books)
         parse_out(output_path, sorted_list)
 
-
-
     # Write the output
 
 
@@ -124,8 +122,15 @@ def sort_books(books):
     return sorted_list
 
 def parse_out(output_path, sorted_list):
-    pass
+    f = open(output_path, "w")
+    f.write("")
+    f.close()
 
+    f = open(output_path, "a")
+    f.write("Book Name:In/Out Pairs,Idle Time,Total Borrowed,Longest Borrow,Shortest Idle\n")
+    for i in range(0, len(sorted_list)):
+        f.write(f'{sorted_list[i][0]}: {sorted_list[i][1]["borrows"]}, {int(sorted_list[i][1]["idle_time"].days)}, {int(sorted_list[i][1]["total_borrow_time"].days)}, {int(sorted_list[i][1]["longest_borrow"].days)}, {int(sorted_list[i][1]["min_idle_time"].days)} \n')
 
+    f.close()
 
 main()
