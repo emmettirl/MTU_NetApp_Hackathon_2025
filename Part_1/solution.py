@@ -65,11 +65,23 @@ def parse_in(input_path):
                 checkout = True
 
         i += 1
-    return books
+
+    books_with_count = count_borrows(books)
+
+    return books_with_count
 
 def string_to_datetime(date_string):
     date_list = date_string.split("/")
     return date(int(date_list[2]), int(date_list[1]), int(date_list[0]))
+
+def count_borrows(books):
+    for book in books.keys():
+        books[book]["borrows"] = len(books[book]["check_ins"])
+
+    return books
+
+def calculate_idle_time(books):
+    for book in books.keys():
 
 
 
