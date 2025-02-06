@@ -18,7 +18,10 @@ def main():
         output_path = os.path.join(output_folder, input_file.replace("input", "output"))
 
         books = parse_in(input_path)
-        print(books)
+        # print(books)
+
+        sorted_list = sort_books(books)
+        parse_out(output_path, sorted_list)
 
 
 
@@ -69,8 +72,9 @@ def parse_in(input_path):
 
     books_with_count = count_borrows(books)
     books_with_idle_time = calculate_idle_time(books)
+    books_with_total_borrow_time = sum_borrow_time(books)
 
-    return books_with_count
+    return books_with_total_borrow_time
 
 def string_to_datetime(date_string):
     date_list = date_string.split("/")
@@ -90,12 +94,37 @@ def calculate_idle_time(books):
                 idle_times.append((books[book]["check_outs"][i+1])-checkin)
 
         books[book]["idle_time"] = sum(idle_times, timedelta(0)) / len(idle_times)
+        books[book]["min_idle_time"] = min(idle_times)
+    return books
+
+def sum_borrow_time(books):
+    for book in books.keys():
+        borrow_times = []
+        for i, checkout in enumerate(books[book]["check_outs"]):
+            if i < len(books[book]["check_ins"]):
+                borrow_times.append( (books[book]["check_ins"][i]) - checkout )
+
+        books[book]["total_borrow_time"] = sum(borrow_times, timedelta(0))
+        books[book]["longest_borrow"] = max(borrow_times)
     return books
 
 
+def sort_books(books):
+    sorting_list = []
+    for book in books.keys():
+        sorting_list.append((book, books[book]["borrows"], books[book]["min_idle_time"]))
 
+    sorted_by_borrows_idletime_alpha = sorted(sorting_list, key=lambda tup: (tup[1], tup[2], tup[0]))
 
+    sorted_list = []
+    for book in sorted_by_borrows_idletime_alpha:
+        sorted_list.append((book[0], books[book[0]]))
 
+    print(sorted_list)
+    return sorted_list
+
+def parse_out(output_path, sorted_list):
+    pass
 
 
 
