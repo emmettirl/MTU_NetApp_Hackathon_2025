@@ -1,5 +1,6 @@
 import os
-import datetime
+from datetime import datetime
+from datetime import date
 
 def main():
     input_folder = "input_files"
@@ -15,41 +16,60 @@ def main():
         input_path = os.path.join(input_folder, input_file)
         output_path = os.path.join(output_folder, input_file.replace("input", "output"))
 
-        # Implement processing logic
-        f = open(input_path, "r")
+        books = parse_in(input_path)
+        print(books)
 
-        lines = f.readlines()
 
-        for i, line in enumerate(lines):
-            lines[i] = line.replace("\n", "")
 
-        n = lines[0]
+    # Write the output
 
-        title = ""
-        books = {}
-        newBook = True
 
-        for i in (range (1, len(lines)-1)):
+def parse_in(input_path):
 
-            if lines[i] == "":
-                newBook = True
-                i+=1
-                continue
 
-            if newBook == True:
-                title = lines[i]
-                books[title] = []
-                newBook = False
-            else:
-                books[title].append(lines[i])
+    # Implement processing logic
+    f = open(input_path, "r")
 
+    lines = f.readlines()
+
+    for i, line in enumerate(lines):
+        lines[i] = line.replace("\n", "")
+
+    n = lines[0]
+
+    title = ""
+    books = {}
+    newBook = True
+    checkout = True
+
+    for i in (range(1, len(lines) - 1)):
+
+        if lines[i] == "":
+            newBook = True
+            checkout = True
             i += 1
+            continue
 
-        print (books)
+        if newBook == True:
+            title = lines[i]
+            books[title] = {}
+            books[title]["check_outs"] = []
+            books[title]["check_ins"] = []
+            newBook = False
+        else:
+            if checkout == True:
+                books[title]["check_outs"].append(string_to_datetime(lines[i]))
+                checkout = False
+            else:
+                books[title]["check_ins"].append(string_to_datetime(lines[i]))
+                checkout = True
 
+        i += 1
+    return books
 
-
-        # Write the output
+def string_to_datetime(date_string):
+    date_list = date_string.split("/")
+    return date(int(date_list[2]), int(date_list[1]), int(date_list[0]))
 
 
 
