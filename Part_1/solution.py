@@ -1,4 +1,5 @@
 import os
+import datetime
 
 def main():
     input_folder = "input_files"
@@ -15,9 +16,25 @@ def main():
         output_path = os.path.join(output_folder, input_file.replace("input", "output"))
 
         # Implement processing logic
+        f = open(input_path, "r")
+
+        lines = f.readlines()
+
+        for i, line in enumerate(lines):
+            lines[i] = line.replace("\n", "")
+
+        n = lines[0]
+
+        for i in (range (0, len(lines)-1)):
+            i += 1
+
+            if lines[i] == "":
+                break
+            print (lines[i])
 
 
         # Write the output
+
 
 
 main()
