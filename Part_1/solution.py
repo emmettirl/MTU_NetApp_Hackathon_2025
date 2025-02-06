@@ -25,12 +25,28 @@ def main():
 
         n = lines[0]
 
-        for i in (range (0, len(lines)-1)):
-            i += 1
+        title = ""
+        books = {}
+        newBook = True
+
+        for i in (range (1, len(lines)-1)):
 
             if lines[i] == "":
-                break
-            print (lines[i])
+                newBook = True
+                i+=1
+                continue
+
+            if newBook == True:
+                title = lines[i]
+                books[title] = []
+                newBook = False
+            else:
+                books[title].append(lines[i])
+
+            i += 1
+
+        print (books)
+
 
 
         # Write the output
